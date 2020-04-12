@@ -29,12 +29,6 @@ public class DefaultController
 		skypeService = new SkypeService();
 	}
 
-	@RequestMapping({"", "/"})
-	public String checkStatus()
-	{
-		return "OK";
-	}
-
 	@RequestMapping(value = "/send/{service}/{message}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public MessageResponse sendMessage(@PathVariable String service, @PathVariable String message)
 	{
