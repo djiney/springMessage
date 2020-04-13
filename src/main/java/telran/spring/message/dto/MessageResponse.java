@@ -1,4 +1,4 @@
-package telran.spring.message.components;
+package telran.spring.message.dto;
 
 public class MessageResponse
 {
