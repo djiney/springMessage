@@ -1,51 +1,31 @@
 package telran.spring.message.controllers;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import telran.spring.message.components.MessageRequest;
 import telran.spring.message.components.MessageResponse;
-import telran.spring.message.services.messages.MessageService;
-import telran.spring.message.services.messages.implementations.EmailService;
-import telran.spring.message.services.messages.implementations.SkypeService;
-import telran.spring.message.services.messages.implementations.SmsService;
+import telran.spring.message.services.messages.MessageServiceInterface;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/rest")
 public class DefaultController
 {
-	private final EmailService emailService;
-	private final SmsService smsService;
-	private final SkypeService skypeService;
+	private final Map<String, MessageServiceInterface> services;
 
-	@Autowired
-	public DefaultController()
-	{
-		emailService = new EmailService();
-		smsService = new SmsService();
-		skypeService = new SkypeService();
+	public DefaultController(Map<String, MessageServiceInterface> services) {
+		this.services = services;
 	}
 
-	@RequestMapping(value = "/send/{service}/{message}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public MessageResponse sendMessage(@PathVariable String service, @PathVariable String message)
+	@ResponseBody @PostMapping("/send")
+	public MessageResponse sendMessage(@RequestBody MessageRequest request)
 	{
 		boolean result = false;
 
-		switch (service) {
-			case MessageService.EMAIL:
-				result = emailService.sendMessage(message);
-			break;
-			case MessageService.SMS:
-				result = smsService.sendMessage(message);
-			break;
-			case MessageService.SKYPE:
-				result = skypeService.sendMessage(message);
-			break;
+		if (services.containsKey(request.getService())) {
+			result = services.get(request.getService()).sendMessage(request.getMessage());
 		}
 
-		return new MessageResponse(result ? "OK" : "ERROR", service, message);
+		return new MessageResponse(result ? "OK" : "ERROR", request.getService(), request.getMessage());
 	}
 }
