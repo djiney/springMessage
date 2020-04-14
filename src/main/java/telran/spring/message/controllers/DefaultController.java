@@ -5,21 +5,19 @@ import telran.spring.message.dto.MessageRequest;
 import telran.spring.message.dto.MessageResponse;
 import telran.spring.message.services.messages.MessageService;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/rest")
 public class DefaultController
 {
-	private final Map<String, MessageService> services = new LinkedHashMap<>();
+	private final Map<String, MessageService> services;
 
 	public DefaultController(List<MessageService> list)
 	{
-		for (MessageService service : list) {
-			services.put(service.getType(), service);
-		}
+		services = list.stream().collect(Collectors.toMap(MessageService::getType,  x -> x));
 	}
 
 	@ResponseBody @PostMapping("/send")
