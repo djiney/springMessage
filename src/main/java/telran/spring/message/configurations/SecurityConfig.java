@@ -1,4 +1,4 @@
-package telran.spring.message.configuration;
+package telran.spring.message.configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
-public class SpringSecurityConfig extends WebSecurityConfigurerAdapter
+public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
 	private static final String USER_PASSWORD = "57hvy3958b73";
 	private static final String ADMIN_PASSWORD = "4yj95h3y593";
