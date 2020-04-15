@@ -1,26 +1,17 @@
-package telran.spring.message.dto;
+package telran.spring.message.dto.implementations;
 
-public class MessageResponse
+import telran.spring.message.dto.BaseResponse;
+
+public class MessageResponse extends BaseResponse
 {
-	String status;
 	String service;
 	String message;
 
 	public MessageResponse(String status, String service, String message)
 	{
-		this.status = status;
+		super(status);
 		this.service = service;
 		this.message = message;
-	}
-
-	public String getStatus()
-	{
-		return status;
-	}
-
-	public void setStatus(String status)
-	{
-		this.status = status;
 	}
 
 	public String getService()

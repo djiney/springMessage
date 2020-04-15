@@ -2,7 +2,8 @@ package telran.spring.message.controllers;
 
 import org.springframework.web.bind.annotation.*;
 import telran.spring.message.dto.MessageRequest;
-import telran.spring.message.dto.MessageResponse;
+import telran.spring.message.dto.implementations.MessageResponse;
+import telran.spring.message.dto.implementations.TypesResponse;
 import telran.spring.message.services.messages.MessageService;
 
 import java.util.List;
@@ -18,6 +19,12 @@ public class DefaultController
 	public DefaultController(List<MessageService> list)
 	{
 		services = list.stream().collect(Collectors.toMap(MessageService::getType,  x -> x));
+	}
+
+	@ResponseBody @GetMapping("/get-types")
+	public TypesResponse getTypes()
+	{
+		return new TypesResponse(services.keySet().toArray());
 	}
 
 	@ResponseBody @PostMapping("/send")
