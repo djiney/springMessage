@@ -2,7 +2,6 @@ package telran.spring.message.configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,20 +14,13 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
-	private final Environment env;
-
-	public SecurityConfig(Environment env)
-	{
-		this.env = env;
-	}
-
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception
 	{
 		auth.inMemoryAuthentication()
-            .withUser("user").password("{noop}" + env.getProperty("app.user.password")).roles("USER")
+            .withUser("user").password("{noop}" + System.getenv("UPWD")).roles("USER")
             .and()
-            .withUser("admin").password("{noop}" + env.getProperty("app.admin.password")).roles("USER", "ADMIN");
+            .withUser("admin").password("{noop}" + System.getenv("APWD")).roles("USER", "ADMIN");
 	}
 
 	@Override
@@ -56,11 +48,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 		InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
 
 		manager.createUser(
-			users.username("user").password(env.getProperty("app.user.password")).roles("USER").build()
+			users.username("user").password(System.getenv("UPWD")).roles("USER").build()
 		);
 
 		manager.createUser(
-			users.username("admin").password(env.getProperty("app.admin.password")).roles("USER", "ADMIN").build()
+			users.username("admin").password(System.getenv("APWD")).roles("USER", "ADMIN").build()
 		);
 
 		return manager;
