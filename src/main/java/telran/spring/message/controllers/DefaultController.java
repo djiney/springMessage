@@ -21,6 +21,12 @@ public class DefaultController
 		services = list.stream().collect(Collectors.toMap(MessageService::getType,  x -> x));
 	}
 
+	@ResponseBody @GetMapping("/handshake")
+	public String handshake()
+	{
+		return "OK";
+	}
+
 	@ResponseBody @GetMapping("/get-types")
 	public TypesResponse getTypes()
 	{
